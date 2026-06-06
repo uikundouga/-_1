@@ -368,12 +368,13 @@ function signOut(){
 function onAuthChange(user){
   currentUser=user; updateAuthUI();
   if(user){
+    rerenderAll(); // まずローカルデータで即表示
     dbListener=fbDb.ref(`users/${user.uid}`).on('value',snap=>{
       const d=snap.val();
       if(d&&d.tasks){ localStorage.setItem(KEY,JSON.stringify(d)); rerenderAll(); }
     });
     setSyncDot('ok');
-  }else{ setSyncDot('off'); renderRec(); }
+  }else{ setSyncDot('off'); rerenderAll(); }
 }
 function updateAuthUI(){
   const el=document.getElementById('authArea');
